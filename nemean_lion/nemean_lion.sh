@@ -12,6 +12,8 @@ then
 	exit 1
 fi
 
+apt-get install openssh-server -y
+
 sed 's/^#\? \?Port .*/Port 50000/' /etc/ssh/sshd_config > sshd_config.tmp
 
 if [ ! -f sshd_config.tmp ]
