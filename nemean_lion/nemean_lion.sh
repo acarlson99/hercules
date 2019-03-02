@@ -12,7 +12,7 @@ then
 	exit 1
 fi
 
-sed 's/#\? \?Port .*/Port 50000/' /etc/ssh/sshd_config > sshd_config.tmp
+sed 's/^#\? \?Port .*/Port 320/' /etc/ssh/sshd_config > sshd_config.tmp
 
 if [ ! -f sshd_config.tmp ]
 then
