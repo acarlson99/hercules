@@ -1,7 +1,7 @@
 CC := clang
 CFLAGS := -Wall -Wextra -Werror -Wpedantic
 DFLAGS := -Wall -Wextra -Wpedantic -g
-CFILES := main.c
+CFILES := main.c aux.c
 OFILES := $(CFILES:.c=.o)
 SRC := src/
 NAME := hydra
