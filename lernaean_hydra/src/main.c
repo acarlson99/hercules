@@ -6,13 +6,13 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 11:31:10 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/08 02:34:31 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 03:03:35 by john             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	bind_sock(int sock, int addr, struct sockaddr_in server)
+void	setup_server(int sock, int addr, struct sockaddr_in server)
 {
 	struct sockaddr		*saddr;
 
@@ -27,14 +27,14 @@ void	bind_sock(int sock, int addr, struct sockaddr_in server)
 	}
 }
 
-int	accept_conn(struct sockaddr_in *client, int sock_s)
+int	setup_client(struct sockaddr_in *client, int sock_s)
 {
-	int		len;
+	size_t	len;
 	int		sock_c;
 
 	len = sizeof(struct sockaddr_in);
-	if ((sock_c = accept(sock_s, (struct sockaddr *)client, \
-								(socklen_t*)&len)) < 0)
+	if ((sock_c = accept(sock_s,\
+					(struct sockaddr *)client, (socklen_t*)&len)) < 0)
 		return (BAD_CONN);
 	return (sock_c);
 }
@@ -49,11 +49,11 @@ int			setup_server(void)
 	if ((sock_s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		exit(1);
 	server.sin_port = htons(PORT);
-	bind_sock(sock_s, INADDR_ANY, server);
+	setup_server(sock_s, INADDR_ANY, server);
 	listen(sock_s, BACKLOG);
 	while (1)
 	{
-		if ((sock_c = accept_conn(&client, sock_s)) != BAD_CONN)
+		if ((sock_c = setup_client(&client, sock_s)) >= 0)
 		{
 			ft_putstr_fd("pong\n", sock_c);
 			ft_putstr_fd("pong\n", sock_c);
