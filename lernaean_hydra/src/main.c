@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 11:31:10 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/08 02:07:17 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 02:34:31 by john             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	bind_sock(int sock, int addr, struct sockaddr_in server)
 {
-	struct sockaddr		*a;
+	struct sockaddr		*saddr;
 
-	a = (struct sockaddr *)&server;
+	saddr = (struct sockaddr *)&server;
 	server.sin_family = PF_INET;
 	server.sin_addr.s_addr = addr;
-	if (bind(sock, a, sizeof(server)) < 0)
+	if (bind(sock, saddr, sizeof(server)) < 0)
 	{
 		ft_putstr_fd("Unable to bind socket\n", STDERR_FILENO);
-		ft_putstr_fd("Port is full\n", STDERR_FILENO);
+		ft_putstr_fd("Port is occupied\n", STDERR_FILENO);
 		exit(1);
 	}
 }

@@ -12,12 +12,24 @@ run() {
 }
 
 kill() {
-	echo "Slicing heads and cauterizing wounds"
+	echo 'Slicing heads and cauterizing wounds'
 	pkill hydra
 }
 
 connect() {
-	nc localhost $(grep PORT server.h | awk '{print $4}')
+	echo 'Attempting to connect to server'
+	nc localhost $(grep PORT src/server.h | awk '{print $4}')
+}
+
+check() {
+	if [ $(pgrep 'hydra') ]
+	then
+		echo 'Server is running'
+		return 1
+	else
+		echo 'Server not running'
+		return 0
+	fi
 }
 
 case $1 in
@@ -38,6 +50,9 @@ case $1 in
 		;;
 	connect)
 		connect
+		;;
+	check)
+		check
 		;;
 	*)
 		echo "Usage:

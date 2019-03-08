@@ -29,5 +29,5 @@ k: fclean
 
 l: re
 
-%.o: %.c
+%.o: $(addprefix $(SRC), %.c)
 	$(CC) $(CFLAGS) -o $@ -c $<
