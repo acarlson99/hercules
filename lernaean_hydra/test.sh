@@ -1,10 +1,19 @@
 #! /bin/sh
 
 run() {
-	make >/dev/null && ./hydra -D
+	echo "Running hydra"
+	a=$(pgrep 'hydra')
+	echo $a
+	if [ ! $a ]
+	then
+	   make >/dev/null && ./hydra -D
+	else
+		echo 'There is already one hydra alive and kicking.  One at a time'
+	fi
 }
 
 kill() {
+	echo "Slicing heads and cauterizing wounds"
 	pkill hydra
 }
 

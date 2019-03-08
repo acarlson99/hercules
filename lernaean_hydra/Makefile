@@ -1,4 +1,4 @@
-CC := gcc
+CC := clang
 CFLAGS := -Wall -Wextra -Werror -Wpedantic
 DFLAGS := -Wall -Wextra -Wpedantic -g
 CFILES := main.c aux.c

@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 13:48:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/07 23:47:48 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 01:49:13 by john             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int			read_args(int argc, char **argv)
 	{
 		if (!ft_strcmp(argv[1], "-D"))
 			return (1);
+		ft_putstr_fd("Usage: ./hydra [-D]\n", STDERR_FILENO);
 		return (-1);
 	}
 	return (0);
