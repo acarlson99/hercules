@@ -5,7 +5,7 @@ run() {
 	if [ ! $(pgrep 'hydra') ]
 	then
 		echo 'Running hydra'
-	   make >/dev/null && ./hydra -D
+		make >/dev/null && ./hydra -D
 	else
 		echo 'There is already one hydra alive and kicking.  One at a time'
 	fi
@@ -55,10 +55,9 @@ case $1 in
 		check
 		;;
 	*)
-		echo "Usage:
+		echo 'Usage:
 \trun/setup:      runs server as daemon
 \tkill/shutdown:  kills server
-\tconnect:        connects to server for testing"
+\tconnect:        connects to server for testing'
 		;;
-
 esac
