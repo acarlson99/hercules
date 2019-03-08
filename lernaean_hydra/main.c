@@ -6,43 +6,52 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 11:31:10 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/07 16:21:21 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/03/07 17:30:10 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+#include <stdio.h>	// TODO: remove
 
 int			create_socket(void)
 {
 	int		s;
 
+	printf("Creating socket\n");
 	if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		exit(1);
 	return (s);
 }
 
-void		listen_loop(struct sockaddr_in *server, struct sockaddr_in *client)
+void		listen_loop(int socket, int daemon)
 {
+	struct sockaddr_in				server;
+	struct sockaddr_in				client;
+
+	(void)socket;
+	(void)daemon;
 	(void)server;
 	(void)client;
-	while (1);
+	// listen on port PORT
+	// accept connection
+	// pong back
+	// drop connection
+	while (1)
+	{
+	}
 }
 
 int			main(int argc, char **argv)
 {
-	pid_t					pid;
-	pid_t					sid;
-	int						d;
-	struct sockaddr_in		server;
-	struct sockaddr_in		client;
+	static pid_t		pid;
+	static pid_t		sid;
+	int					daemon;
+	int					socket;
 
-	(void)server;
-	(void)client;
-	if ((d = read_args(argc, argv)) < 0)
+	if ((daemon = read_args(argc, argv)) < 0)
 		exit(1);
-	pid = 0;
-	sid = 0;
-	if (d)
+	socket = create_socket();
+	if (daemon)
 	{
 		pid = fork();
 		if (pid < 0)
@@ -56,5 +65,5 @@ int			main(int argc, char **argv)
 	// close(STDIN_FILENO);
 	// close(STDOUT_FILENO);
 	// close(STDERR_FILENO);
-	listen_loop(&server, &client);
+	listen_loop(socket, daemon);
 }
