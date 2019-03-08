@@ -18,17 +18,20 @@ kill() {
 
 connect() {
 	echo 'Attempting to connect to server'
-	nc localhost $(grep PORT src/server.h | awk '{print $4}')
+	if [ $(pgrep 'hydra') ]
+	then
+		nc localhost $(grep PORT src/server.h | awk '{print $4}')
+	fi
 }
 
-check() {
+isrunning() {
 	if [ $(pgrep 'hydra') ]
 	then
 		echo 'Server is running'
-		return 1
+		return 0
 	else
 		echo 'Server not running'
-		return 0
+		return 1
 	fi
 }
 
@@ -51,8 +54,11 @@ case $1 in
 	connect)
 		connect
 		;;
+	isrunning)
+		isrunning
+		;;
 	check)
-		check
+		isrunning
 		;;
 	*)
 		echo 'Usage:

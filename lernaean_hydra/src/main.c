@@ -39,7 +39,7 @@ int	setup_client(struct sockaddr_in *client, int sock_s)
 	return (sock_c);
 }
 
-int			setup_server(void)
+int			run_server(void)
 {
 	int						sock_s;
 	int						sock_c;
@@ -82,5 +82,5 @@ int			main(int argc, char **argv)
 		if (sid < 0)
 			exit(1);
 	}
-	setup_server();
+	run_server();
 }
