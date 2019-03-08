@@ -1,11 +1,10 @@
 #! /bin/sh
 
 run() {
-	echo "Running hydra"
-	a=$(pgrep 'hydra')
-	echo $a
-	if [ ! $a ]
+	echo 'Attempting to run hydra'
+	if [ ! $(pgrep 'hydra') ]
 	then
+		echo 'Running hydra'
 	   make >/dev/null && ./hydra -D
 	else
 		echo 'There is already one hydra alive and kicking.  One at a time'
