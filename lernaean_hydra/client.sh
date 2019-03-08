@@ -62,8 +62,10 @@ case $1 in
 		;;
 	*)
 		echo 'Usage:
-\trun/setup:      runs server as daemon
-\tkill/shutdown:  kills server
-\tconnect:        connects to server for testing'
+\trun/setup:        run server as daemon
+\tkill/shutdown:    kill server
+\tconnect:          connect to server for testing
+\tisrunning/check:  check if server is running'
+		return 1
 		;;
 esac
