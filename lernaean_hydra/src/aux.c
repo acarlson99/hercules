@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 13:48:54 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/08 01:49:13 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 15:23:20 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int			read_args(int argc, char **argv)
 	return (0);
 }
 
-void	ft_bzero(void *b, size_t len)
+void		ft_bzero(void *b, size_t len)
 {
 	while (len--)
 		*((unsigned char *)b + len) = 0;

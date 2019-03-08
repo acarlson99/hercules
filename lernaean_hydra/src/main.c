@@ -6,19 +6,17 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 11:31:10 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/08 03:03:35 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 15:25:09 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	setup_server(int sock, int addr, struct sockaddr_in server)
+void	bind_server(int sock, struct sockaddr_in server)
 {
 	struct sockaddr		*saddr;
 
 	saddr = (struct sockaddr *)&server;
-	server.sin_family = PF_INET;
-	server.sin_addr.s_addr = addr;
 	if (bind(sock, saddr, sizeof(server)) < 0)
 	{
 		ft_putstr_fd("Unable to bind socket\n", STDERR_FILENO);
@@ -27,7 +25,7 @@ void	setup_server(int sock, int addr, struct sockaddr_in server)
 	}
 }
 
-int	setup_client(struct sockaddr_in *client, int sock_s)
+int		accept_client(struct sockaddr_in *client, int sock_s)
 {
 	size_t	len;
 	int		sock_c;
@@ -39,7 +37,7 @@ int	setup_client(struct sockaddr_in *client, int sock_s)
 	return (sock_c);
 }
 
-int			run_server(void)
+int		run_server(void)
 {
 	int						sock_s;
 	int						sock_c;
@@ -48,12 +46,14 @@ int			run_server(void)
 
 	if ((sock_s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		exit(1);
+	server.sin_family = PF_INET;
+	server.sin_addr.s_addr = INADDR_ANY;
 	server.sin_port = htons(PORT);
-	setup_server(sock_s, INADDR_ANY, server);
+	bind_server(sock_s, server);
 	listen(sock_s, BACKLOG);
 	while (1)
 	{
-		if ((sock_c = setup_client(&client, sock_s)) >= 0)
+		if ((sock_c = accept_client(&client, sock_s)) >= 0)
 		{
 			ft_putstr_fd("pong\n", sock_c);
 			ft_putstr_fd("pong\n", sock_c);
@@ -63,7 +63,7 @@ int			run_server(void)
 	return (0);
 }
 
-int			main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	static pid_t		pid;
 	static pid_t		sid;

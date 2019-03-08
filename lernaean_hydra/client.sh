@@ -1,10 +1,9 @@
 #! /bin/sh
 
 run() {
-	echo 'Attempting to run hydra'
 	if [ ! $(pgrep 'hydra') ]
 	then
-		echo 'Running hydra'
+		echo 'Releasing new hydra'
 		make >/dev/null && ./hydra -D
 	else
 		echo 'There is already one hydra alive and kicking.  One at a time'
@@ -12,8 +11,13 @@ run() {
 }
 
 kill() {
-	echo 'Slicing heads and cauterizing wounds'
-	pkill hydra
+	if [ $(pgrep 'hydra') ]
+	then
+		echo 'Slicing heads and cauterizing wounds'
+		pkill hydra
+	else
+		echo 'Hydra has already been slain'
+	fi
 }
 
 connect() {
@@ -48,6 +52,9 @@ case $1 in
 	shutdown)
 		kill
 		;;
+	re)
+		kill && run
+		;;
 	restart)
 		kill && run
 		;;
@@ -64,8 +71,9 @@ case $1 in
 		echo 'Usage:
 \trun/setup:        run server as daemon
 \tkill/shutdown:    kill server
+\tre/restart:          restart server
 \tconnect:          connect to server for testing
 \tisrunning/check:  check if server is running'
-		return 1
+		exit 1
 		;;
 esac
