@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 11:31:10 by acarlson          #+#    #+#             */
-/*   Updated: 2019/03/08 00:12:32 by john             ###   ########.fr       */
+/*   Updated: 2019/03/08 00:52:49 by john             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,19 @@
 
 struct sockaddr_in				g_client;
 
-int			create_sock(void)
-{
-	int		sock;
-
-	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-		exit(1);
-	return (sock);
-}
-
 /*
 ** Bind the sock, assigning and address and port number to it.
 */
 
 void	bind_sock(int sock, int addr, struct sockaddr_in server)
 {
+	struct sockaddr		*a;
+
+	a = (struct sockaddr *)&server;
 	server.sin_family = PF_INET;
 	server.sin_addr.s_addr = addr;
 	server.sin_port = htons(PORT);
-	if (bind(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
+	if (bind(sock, a, sizeof(server)) < 0)
 	{
 		ft_putstr_fd("Unable to bind sock\n", FT_STDERR_FILENO);
 		exit(1);
@@ -73,7 +67,8 @@ int			setup_server(void)
 	struct sockaddr_in		server;
 	struct sockaddr_in		client;
 
-	sock_s = create_sock();
+	if ((sock_s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		exit(1);
 	bind_sock(sock_s, INADDR_ANY, server);
 	listen(sock_s, BACKLOG);
 	while (1)
