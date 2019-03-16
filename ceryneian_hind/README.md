@@ -2,6 +2,8 @@
 
 Built using ruby 2.6.1, oauth2, and 42 API
 
+Small script using 42 API and oauth2 to get location of a list of students
+
 ## Usage
 
 ```bash

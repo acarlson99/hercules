@@ -9,6 +9,3 @@ else
 	echo "usage: ./setup.sh UID SECRET"
 	exit 1
 fi
-
-echo "> Installing packages"
-bundle install
