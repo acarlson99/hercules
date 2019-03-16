@@ -2,16 +2,17 @@
 
 require 'oauth2'
 
-UID = # REDACTED
-SECRET = # REDACTED
+UID = ENV['ceryneian_hind_UID']
+SECRET = ENV['ceryneian_hind_SECRET']
 
 def findBoy(boy, token)
-  status = 0
+  s = "v2/users/" + boy + "/locations"
   begin
-    while status != 200
-      s = "v2/users/" + boy + "/locations"
+    response = token.get s
+    while response.status != 200
+      puts "No response... Trying again"
+      sleep 5
       response = token.get s
-      status = response.status
     end
     b = response.parsed[0]
     if not b['end_at']
@@ -28,6 +29,7 @@ def main(argv)
   begin
     client = OAuth2::Client.new UID, SECRET, site: "https://api.intra.42.fr"
     token = client.client_credentials.get_token
+
     begin
       File.foreach(argv[0]).with_index do |line, line_num|
         boy = line[0..-2]
@@ -35,7 +37,7 @@ def main(argv)
       end
     end
   rescue
-    puts "FILE NOT FOUND ASSHOLE"
+    puts "Error making request"
     exit 1
   end
 rescue
@@ -46,6 +48,10 @@ end
 if $PROGRAM_NAME == __FILE__
   if ARGV.length != 1
     puts "usage: ./main.rb boys.txt"
+    exit 1
+  end
+  if not UID or not SECRET
+    puts "Bruh set UID and SECRET"
     exit 1
   end
   main(ARGV)
