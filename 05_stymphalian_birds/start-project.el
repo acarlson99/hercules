@@ -123,10 +123,15 @@
 	  ))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
+(defun start-project-help ()
+  "Help option for start-project."
+  (message "This simply creates a series of files/directories depending on the type of project specified")
+  (message "supported options: c c++ rust help"))
+
 (defun start-project (project-type)
   "Clone gitignore, libft(?), first push(?)\
 and start project of type PROJECT-TYPE."
-  (interactive "sWhat type of project? ")
+  (interactive "sWhat type of project?(help to show help message) ")
   (cond
    ((string= project-type "c")
 	(start-project-c))
@@ -134,10 +139,10 @@ and start project of type PROJECT-TYPE."
 	(start-project-c++))
    ((string= project-type "rust")
 	(start-project-rust))
+   ((string= project-type "help")
+	(start-project-help))
    ((= 1 1)
-	(message "Invalid project type"))
-   )
-  )
+	(message "usage: M-x start-project help"))))
 
 (provide 'start-project)
 ;;; start-project.el ends here
