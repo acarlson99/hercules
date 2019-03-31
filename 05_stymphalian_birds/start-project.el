@@ -67,11 +67,35 @@
   (make-author)
   (clone-gitignore)
   (clone-libft)
-  (make-directory "src")
-  (make-directory "inc")
-  (with-temp-file "Makefile"
-	(insert ""))
-  )
+  (if (file-exists-p "src")
+	  (message "src dir exists.  Skipping creation of src dir")
+	(make-directory "src"))
+  (if (file-exists-p "inc")
+	  (message "inc dir exists.  Skipping creation of inc dir")
+	(make-directory "inc"))
+  (if (file-exists-p "Makefile")
+	  (message "Makefile exists.  Skipping creation of Makefile")
+	(with-temp-file "Makefile"
+	  (insert "")))
+  (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
+
+(defun start-project-c++ ()
+  "Start a c++ project."
+  (message "Starting c++ project")
+  (make-author)
+  (clone-gitignore)
+  (clone-libft)
+  (if (file-exists-p "src")
+	  (message "src dir exists.  Skipping creation of src dir")
+	(make-directory "src"))
+  (if (file-exists-p "inc")
+	  (message "inc dir exists.  Skipping creation of inc dir")
+	(make-directory "inc"))
+  (if (file-exists-p "Makefile")
+	  (message "Makefile exists.  Skipping creation of Makefile")
+	(with-temp-file "Makefile"
+	  (insert "")))
+  (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
 (defun start-project (project-type)
   "Clone gitignore, libft(?), first push(?)\
