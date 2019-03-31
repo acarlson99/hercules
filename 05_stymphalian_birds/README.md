@@ -16,6 +16,8 @@ Add the following to ~/.emacs.d/init.el
 
 ## Usage
 
+From within emacs:
+
 ```
 M-x mkdir project-name C-x C-f project-name M-x start-project RET rust RET
 ```
