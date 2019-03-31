@@ -73,6 +73,9 @@
   (if (file-exists-p "inc")
 	  (message "inc dir exists.  Skipping creation")
 	(make-directory "inc"))
+  (if (file-exists-p "lib")
+	  (message "lib dir exists.  Skipping creation")
+	(make-directory "lib"))
   (if (file-exists-p "Makefile")
 	  (message "Makefile exists.  Skipping creation")
 	(with-temp-file "Makefile"
@@ -91,6 +94,9 @@
   (if (file-exists-p "inc")
 	  (message "inc dir exists.  Skipping creation")
 	(make-directory "inc"))
+  (if (file-exists-p "lib")
+	  (message "lib dir exists.  Skipping creation")
+	(make-directory "lib"))
   (if (file-exists-p "Makefile")
 	  (message "Makefile exists.  Skipping creation")
 	(with-temp-file "Makefile"
@@ -107,13 +113,13 @@
 	(progn
 	  (make-directory "src")
 	  (with-temp-file "src/main.rs"
-		(insert "fn main() {\nprintln!("Hello, world!");\n}"))
+		(insert "fn main() {\n\tprintln!(\"Hello, world!\");\n}"))
 	  ))
   (if (file-exists-p "Cargo.toml")
 	  (message "Cargo.toml exists.  Skipping creation")
 	(progn
 	  (with-temp-file "Cargo.toml"
-		(insert (format "[package]\nname = \"NAME\"\nversion = \"0.1.0\"\nauthors = [\"%s\"]\nedition = \"%s\"\n\n[dependencies]\n" user-login-name "TIME")))
+		(insert (format "[package]\nname = \"NAME\"\nversion = \"0.1.0\"\nauthors = [\"%s\"]\nedition = \"%d\"\n\n[dependencies]\n" user-login-name 2019)))
 	  ))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
