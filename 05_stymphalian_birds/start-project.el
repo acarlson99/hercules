@@ -142,7 +142,7 @@ and start project of type PROJECT-TYPE."
    ((string= project-type "help")
 	(start-project-help))
    ((= 1 1)
-	(message "usage: M-x start-project help"))))
+	(message "usage: M-x start-project [c|c++|rust|help]"))))
 
 (provide 'start-project)
 ;;; start-project.el ends here
