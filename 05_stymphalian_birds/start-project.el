@@ -48,9 +48,18 @@
 			)))
 	(message "skipping make-author")))
 
-(defun git-init-project ()
-  "Initialize git repo and maybe push to master."
-  )
+(defun git-init-project (repo-url)
+  "Initialize git repo and maybe push to REPO-URL."
+  (interactive "sRepo url(blank to skip) ")
+  (if (string= repo-url "")
+	  (message "Skipping git-init-project")
+	(progn
+	  (if (file-exists-p ".git")
+		  (message ".git file exists.  Skipping git-init-project")
+		(progn
+		  (if (shell-command (format "git init && git add . && git commit -m \"First commit\" && git remote add origin %s && git push -u origin master" repo-url))
+			  (message "PUSH FAILED")
+			(message "push successful")))))))
 
 (defun start-project-c ()
   "Start a c project."
