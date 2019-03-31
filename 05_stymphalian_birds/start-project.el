@@ -28,5 +28,5 @@
   (append-to-file user-login-name nil "author")
   )
 
-(provide 'manage-project)
-;;; manage-project.el ends here
+(provide 'start-project)
+;;; start-project.el ends here
