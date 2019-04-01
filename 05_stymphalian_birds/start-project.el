@@ -119,7 +119,7 @@
 	  (message "Cargo.toml exists.  Skipping creation")
 	(progn
 	  (with-temp-file "Cargo.toml"
-		(insert (format "[package]\nname = \"NAME\"\nversion = \"0.1.0\"\nauthors = [\"%s\"]\nedition = \"%s\"\n\n[dependencies]\n" user-login-name (format-time-string "%Y"))))
+		(insert (format "[package]\nname = \"NAME\"\nversion = \"0.1.0\"\nauthors = [\"%s\"]\nedition = \"2018\"\n\n[dependencies]\n" user-login-name)))
 	  ))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
