@@ -128,6 +128,14 @@
   (message "This simply creates a series of files/directories depending on the type of project specified")
   (message "supported options: c c++ rust help"))
 
+(defun start-project-generic ()
+  "Start other type of project."
+  (if (y-or-n-p "Invalid project type.  Create generic project? ")
+	  (progn
+		(make-author)
+		(clone-gitignore)
+		(git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))))
+
 (defun start-project (project-type)
   "Clone gitignore, libft(?), first push(?)\
 and start project of type PROJECT-TYPE."
@@ -142,7 +150,7 @@ and start project of type PROJECT-TYPE."
    ((string= project-type "help")
 	(start-project-help))
    ((= 1 1)
-	(message "usage: M-x start-project [c|c++|rust|help]"))))
+	(start-project-generic))))
 
 (provide 'start-project)
 ;;; start-project.el ends here
