@@ -9,7 +9,7 @@
 | [Ceryneian Hind](02_ceryneian_hind/)       | Use 42's API and oauth2 to find where students are sitting       | :white\_check\_mark: |
 | [Erymanthian Boar](03_erymanthian_boar/)   | Write a script that executes some code at some time exactly once | :white\_check\_mark: |
 | [Augean Stables](04_augean_stables/)       | Fix a leaky C program                                            | :white\_check\_mark: |
-| [Stymphalian Birds](05_stymphalian_birds/) | Make a script to automate the creation of future projects        | :question:           |
+| [Stymphalian Birds](05_stymphalian_birds/) | Make a script to automate the creation of future projects        | :white\_check\_mark: |
 
 :question:				- not yet graded
 

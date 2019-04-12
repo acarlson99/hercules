@@ -1,4 +1,4 @@
-;;; start-project.el --- Start project of a specific type
+;;; project-start.el --- Start project of a specific type
 ;; Author: Alexander Carlson <alexandercarlson99@gmail.com>
 ;; Maintainer: Alexander Carlson <alexandercarlson99@gmail.com>
 ;; Created: 31 Mar 2019
@@ -58,10 +58,10 @@
 		  (message ".git file exists.  Skipping git-init-project")
 		(progn
 		  (if (shell-command (format "git init && git add . && git commit -m \"First commit\" && git remote add origin %s && git push -u origin master" repo-url))
-			  (message "PUSH FAILED")
-			(message "push successful")))))))
+			  (message "push successful")
+			(message "PUSH FAILED")))))))
 
-(defun start-project-c ()
+(defun project-start-c ()
   "Start a c project."
   (message "Starting c project")
   (make-author)
@@ -82,7 +82,7 @@
 	  (insert "")))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
-(defun start-project-c++ ()
+(defun project-start-c++ ()
   "Start a c++ project."
   (message "Starting c++ project")
   (make-author)
@@ -103,7 +103,7 @@
 	  (insert "")))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
-(defun start-project-rust ()
+(defun project-start-rust ()
   "Start a rust project."
   (message "Starting rust project")
   (make-author)
@@ -123,26 +123,34 @@
 	  ))
   (git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))
 
-(defun start-project-help ()
-  "Help option for start-project."
+(defun project-start-help ()
+  "Help option for project-start."
   (message "This simply creates a series of files/directories depending on the type of project specified")
   (message "supported options: c c++ rust help"))
 
-(defun start-project (project-type)
+(defun project-start-generic ()
+  "Start other type of project."
+  (if (y-or-n-p "Invalid project type.  Create generic project? ")
+	  (progn
+		(make-author)
+		(clone-gitignore)
+		(git-init-project (read-from-minibuffer "Repo url(blank to skip) ")))))
+
+(defun project-start (project-type)
   "Clone gitignore, libft(?), first push(?)\
 and start project of type PROJECT-TYPE."
   (interactive "sWhat type of project?(help to show help message) ")
   (cond
    ((string= project-type "c")
-	(start-project-c))
+	(project-start-c))
    ((string= project-type "c++")
-	(start-project-c++))
+	(project-start-c++))
    ((string= project-type "rust")
-	(start-project-rust))
+	(project-start-rust))
    ((string= project-type "help")
-	(start-project-help))
+	(project-start-help))
    ((= 1 1)
-	(message "usage: M-x start-project [c|c++|rust|help]"))))
+	(project-start-generic))))
 
-(provide 'start-project)
-;;; start-project.el ends here
+(provide 'project-start)
+;;; project-start.el ends here
