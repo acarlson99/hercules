@@ -10,6 +10,7 @@
 | [Erymanthian Boar](03_erymanthian_boar/)   | Write a script that executes some code at some time exactly once | :white\_check\_mark: |
 | [Augean Stables](04_augean_stables/)       | Fix a leaky C program                                            | :white\_check\_mark: |
 | [Stymphalian Birds](05_stymphalian_birds/) | Make a script to automate the creation of future projects        | :white\_check\_mark: |
+| [Cretan Bull](06_cretan_bull/)             | Write a warrior for the infamous game Corewar                    | :question:           |
 
 :question:				- not yet graded
 
