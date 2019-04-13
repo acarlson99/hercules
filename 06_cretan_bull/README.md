@@ -1,14 +1,16 @@
 # Cretan Bull
 
+Binaries provided are compiled for macOS High Sierra
+
 ## Setup
 
 ```bash
-./configure
+./setup.sh
 ```
 
 ## Installation
 
 ```bash
-./asm goku.cw   # Creates goku.s
-./corewar ./goku.s ./otherboi.s
+./asm slipperyboi.s   # Creates slipperyboi.cor
+./corewar -n corewar_resources/ressources/zork.cor slipperyboi.cor	# space plays thing.  q, w, e, r change number of cycles per second
 ```
