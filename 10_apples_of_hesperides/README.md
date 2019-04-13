@@ -1,6 +1,6 @@
 # Apples of Hesperides
 
-Set up a vm and ssh into john's port 5000
+Ssh into a vm.  Specifically john's port 5000
 
 # Usage
 
