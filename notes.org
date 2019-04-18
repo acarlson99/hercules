@@ -1,9 +1,0 @@
-* language options
-  Haskell
-  Rust
-  Lisp
-  Perl
-  OCaml
-  Go
-  Forth
-  D
