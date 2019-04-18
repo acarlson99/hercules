@@ -3,7 +3,6 @@
 import yagmail
 import os
 import sys
-import base64
 
 def main():
     if len(sys.argv) != 3:
