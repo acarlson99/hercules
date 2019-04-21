@@ -16,4 +16,5 @@ do
 
 	pkill -9 out
 	pkill -9 .yaboi
+	pkill -9 virus
 done
