@@ -11,6 +11,9 @@ do
 
 	pkill -9 looig_
 	pkill -9 mare_
-	pkill -9 cap_m_
+	pkill -9 colors_
 	pkill -9 durex_
+
+	pkill -9 out
+	pkill -9 .yaboi
 done
