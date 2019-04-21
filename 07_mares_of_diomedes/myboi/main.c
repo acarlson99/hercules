@@ -7,9 +7,39 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #ifdef LINUX
-#include <sys/prctl.h>
+# include <sys/prctl.h>
 #endif
 #include <unistd.h>
+
+char *g_escapes[] = {
+	"\033[2J" //  clear screen
+    "\033[1m" // bold
+    "\033[4m" // underscore
+    "\033[5m" // blink
+    "\033[7m" // reverse video on
+    "\033[8m" // concealed on
+
+    "\033[30m" // black
+    "\033[31m" // red
+    "\033[32m" // green
+    "\033[33m" // yellow
+    "\033[34m" // blue
+    "\033[35m" // magenta
+    "\033[36m" // cyan
+    "\033[37m" // white
+
+    "\033[40m" // black
+    "\033[41m" // red
+    "\033[42m" // green
+    "\033[43m" // yellow
+    "\033[44m" // blue
+    "\033[45m" // magenta
+    "\033[46m" // cyan
+    "\033[47m" // white
+
+    "\033[=0h" // 40x25 monochrome
+    "\b" // bell
+};
 
 void	random_pname(char *s1) {
 	FILE *fp = fopen("/dev/urandom", "r");
@@ -34,18 +64,13 @@ void	random_pname(char *s1) {
 	free(str);
 }
 
-void	capmedaddy() {
-	static char letters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	char esc[2];
-
-	random_pname("cap_m_");
+void	colors() {
+	random_pname("colors_");
 
 	while (1) {
-		esc[0] = letters[rand() % (sizeof(letters) / sizeof(*letters))];
-		esc[1] = letters[rand() % (sizeof(letters) / sizeof(*letters))];
-		char *s = tgetstr(esc, NULL);
-		tputs(s, 0, 0);
-		free(s);
+		printf("%s", g_escapes[rand() % (sizeof(g_escapes) / sizeof(*g_escapes))]);
+		fflush(stdout);
+		sleep(20);
 	}
 }
 
@@ -67,7 +92,7 @@ void	protection() {
 void	thing();
 
 static void (*g_bois[])(void) = {
-	capmedaddy,
+	colors,
 	luigme,
 	protection,
 };
@@ -75,6 +100,8 @@ static void (*g_bois[])(void) = {
 int forkyboi() {
 	int		pid;
 	int		sid;
+
+	write(1, "A", 1);
 	pid = fork();
 	if (pid < 0)
 		exit(1);
