@@ -30,11 +30,6 @@ void	random_pname(char *s1) {
 	free(str);
 }
 
-// mlp ascii art
-// curl luigi
-// listen to literally all available sockets
-// mess with stty
-
 void	capmedaddy() {
 	static char letters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	char esc[2];
@@ -108,7 +103,7 @@ void	thing() {
 
 	random_pname(NULL);
 	sigfillset(&mask);
-	sigprocmask(SIG_SETMASK, &mask, NULL);	// ignore signals
+	sigprocmask(SIG_SETMASK, &mask, NULL);
 
 	forkyboi();
 }
