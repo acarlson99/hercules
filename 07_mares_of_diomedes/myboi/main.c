@@ -6,7 +6,9 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#ifdef LINUX
 #include <sys/prctl.h>
+#endif
 #include <unistd.h>
 
 void	random_pname(char *s1) {
@@ -25,7 +27,9 @@ void	random_pname(char *s1) {
 			str[i] = s1[i];
 		}
 	}
+#ifdef LINUX
 	prctl(PR_SET_NAME, str);
+#endif
 	fclose(fp);
 	free(str);
 }
