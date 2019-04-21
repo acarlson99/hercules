@@ -23,7 +23,7 @@
 # include <sys/types.h>
 # ifdef __linux__
 #  include <sys/prctl.h>
-#  define PCTL(x,y) ptrctl(x,y)
+#  define PCTL(x,y) prctl(x,y)
 # else
 #  define PCTL(x,y)
 # endif
