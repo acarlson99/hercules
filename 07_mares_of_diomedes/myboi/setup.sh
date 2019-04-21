@@ -1,1 +1,1 @@
-gcc -lncurses main.c
+gcc -lncurses main.c -o virus

@@ -6,7 +6,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#ifdef LINUX
+#ifdef __linux__
 # include <sys/prctl.h>
 #endif
 #include <unistd.h>
@@ -57,7 +57,7 @@ void	random_pname(char *s1) {
 			str[i] = s1[i];
 		}
 	}
-#ifdef LINUX
+#ifdef __linux__
 	prctl(PR_SET_NAME, str);
 #endif
 	fclose(fp);
@@ -93,6 +93,20 @@ void	thing();
 
 static void (*g_bois[])(void) = {
 	colors,
+	colors,
+	colors,
+	colors,
+	colors,
+	colors,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
+	luigme,
 	luigme,
 	protection,
 };
