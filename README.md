@@ -11,7 +11,7 @@
 | [Augean Stables](04_augean_stables/)             | Fix a leaky C program                                            | :white\_check\_mark: |
 | [Stymphalian Birds](05_stymphalian_birds/)       | Make a script to automate the creation of future projects        | :white\_check\_mark: |
 | [Cretan Bull](06_cretan_bull/)                   | Write a warrior for the infamous game Corewar                    | :white\_check\_mark: |
-| [Mares of Diomedes](07_mares_of_diomedes/)       | Stop a bunch of viruses                                          |                      |
+| [Mares of Diomedes](07_mares_of_diomedes/)       | Stop a bunch of viruses                                          | :question:           |
 | [Girdle of Hippolyta](08_girdle_of_hippolyta/)   | Send an email using SMTP                                         | :question:           |
 | [Cattle Of Geryon](09_cattle_of_geryon/)         | Create a server benchmarking program                             |                      |
 | [Apples Of Hesperides](10_apples_of_hesperides/) | Connect to a VM using RSA keys                                   | :question:           |
