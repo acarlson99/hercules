@@ -25,7 +25,9 @@ def main():
             MSG += line
             sys.stdout.write('> ')
             sys.stdout.flush()
+        sys.stdout.write('Sending...\n')
         yagmail.SMTP(FROM, FROM_PASS).send(TO, SUBJECT, MSG)
+        sys.stdout.write('Sent\n')
     except Exception as ex:
         print("Error sending message")
         print(ex)
