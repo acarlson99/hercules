@@ -16,6 +16,8 @@ def main():
             SUBJECT = sys.argv[2]
         except:
             print("Make sure EMAIL_FROM and EMAIL_FROM_PASS environment variables are set")
+            sys.exit(1)
+        sys.stdout.write('Email:\n')
         sys.stdout.write('> ')
         sys.stdout.flush()
         MSG = ""
@@ -27,6 +29,7 @@ def main():
     except Exception as ex:
         print("Error sending message")
         print(ex)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
