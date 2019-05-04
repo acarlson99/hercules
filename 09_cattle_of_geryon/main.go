@@ -29,34 +29,40 @@ type Element struct {
 	time float64
 }
 
-func logErr(e error) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("Recovered from:", r)
-		}
-	}()
-
-	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-
-	defer f.Close()
-
-	if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e))); err != nil {
-		panic(err)
-	}
+type Error struct {
+	err       error
+	timestamp string
 }
 
-func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan int) {
+// func logErr(e error) {
+// 	defer func() {
+// 		if r := recover(); r != nil {
+// 			fmt.Println("Recovered from:", r)
+// 		}
+// 	}()
+
+// 	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	defer f.Close()
+
+// 	if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e))); err != nil {
+// 		panic(err)
+// 	}
+// }
+
+func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan int, errchan chan Error) {
 	defer wg.Done()
 
 	for i := <-gen; i > 0; i = <-gen {
 		begin := time.Now()
 		resp, err := http.Get(server)
 		if err != nil {
-			logErr(err)
-			ch <- Response{-1, -1}
+			// logErr(err)
+			errchan <- Error{err, time.Now().Format("20060102150405")}
+			ch <- Response{-1, time.Since(begin).Seconds()}
 		} else {
 			r := Response{resp.StatusCode, time.Since(begin).Seconds()}
 			ch <- r
@@ -68,6 +74,7 @@ func logToFile(numRequests int, wg *sync.WaitGroup, ch chan Response) {
 	defer wg.Done()
 
 	bar := progressbar.New(numRequests)
+	bar.RenderBlank()
 	m := make(map[int]Element)
 
 	for i := 0; i < numRequests; i++ {
@@ -102,6 +109,28 @@ func generator(numRequests int, gen chan int) {
 	}
 }
 
+func logErrs(errchan chan Error, wg *sync.WaitGroup) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from:", r)
+		}
+	}()
+
+	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	defer f.Close()
+
+	for e := <-errchan; ; e = <-errchan {
+		if err != nil {
+			fmt.Println("Error writing to err.log:", err)
+			continue
+		}
+		if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e.err))); err != nil {
+			fmt.Println("Error writing to err.log:", err)
+		}
+	}
+}
+
 func main() {
 	flag.Parse()
 	args := flag.Args()
@@ -124,14 +153,16 @@ func main() {
 
 	ch := make(chan Response)
 	gen := make(chan int)
+	errchan := make(chan Error)
 
 	go generator(numRequests, gen)
 
-	for i := 0; i < numRoutines; i++ {
-		go sendRequest(args[0], &wg, ch, gen)
-	}
-
 	go logToFile(numRequests, &wg, ch)
+	go logErrs(errchan, &wg)
+
+	for i := 0; i < numRoutines; i++ {
+		go sendRequest(args[0], &wg, ch, gen, errchan)
+	}
 
 	wg.Wait()
 	fmt.Println("")
