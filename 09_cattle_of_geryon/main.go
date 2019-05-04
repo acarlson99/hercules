@@ -117,6 +117,9 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	} else if numRequests < 1 {
+		fmt.Println("Please enter a positive number")
+		os.Exit(1)
 	}
 
 	var wg sync.WaitGroup
