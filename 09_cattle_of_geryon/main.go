@@ -14,11 +14,6 @@ import (
 	"github.com/schollz/progressbar"
 )
 
-// channel for responses and times
-// func for sending requests
-// func for logging all responses
-// func to sum responses
-
 type Response struct {
 	code int
 	time float64
@@ -41,7 +36,6 @@ func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan i
 		begin := time.Now()
 		resp, err := http.Get(server)
 		if err != nil {
-			// logErr(err)
 			errchan <- Error{err, time.Now().Format("20060102150405")}
 			ch <- Response{-1, time.Since(begin).Seconds()}
 		} else {
