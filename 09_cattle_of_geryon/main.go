@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -28,35 +29,23 @@ type Element struct {
 	time float64
 }
 
-// usage: ./main 'http://google.com' 100
+func logErr(e error) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from:", r)
+		}
+	}()
 
-// func main() {
-// 	fmt.Println("HI")
+	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
 
-// 	flag.Parse()
-// 	args := flag.Args()
+	defer f.Close()
 
-// 	if len(args) != 2 {
-// 		fmt.Println("usage: ./main 'http://example.com' num_requests")
-// 		return
-// 	}
-// 	resp, err := http.Get(args[0])
-// 	if err != nil {
-// 		fmt.Println("Error requesting from", args[0])
-// 		return
-// 	}
-
-// 	fmt.Println(Response{1, 100})
-
-// 	fmt.Println(resp.StatusCode)
-// 	defer resp.Body.Close()
-
-// 	fmt.Printf("%d\n", len(args))
-// 	fmt.Println(args[0])
-// }
-
-func logErr(err error) {
-	fmt.Println(err) // TODO: actually log error.  Like in a file
+	if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e))); err != nil {
+		panic(err)
+	}
 }
 
 func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan int) {
@@ -118,13 +107,13 @@ func main() {
 	args := flag.Args()
 	if len(args) != 2 {
 		fmt.Println("usage: ./main 'http://example.com' num_requests")
-		return
+		os.Exit(1)
 	}
 
 	numRequests, err := strconv.Atoi(args[1])
 	if err != nil {
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	var wg sync.WaitGroup
@@ -138,11 +127,11 @@ func main() {
 
 	go generator(numRequests, gen)
 
-	go logToFile(numRequests, &wg, ch)
-
 	for i := 0; i < numRoutines; i++ {
 		go sendRequest(args[0], &wg, ch, gen)
 	}
+
+	go logToFile(numRequests, &wg, ch)
 
 	wg.Wait()
 	fmt.Println("")
