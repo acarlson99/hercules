@@ -5,8 +5,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
 	"sync"
+	"syscall"
 	"time"
 
 	"flag"
@@ -48,9 +50,31 @@ func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan i
 func logToFile(numRequests int, wg *sync.WaitGroup, ch chan Response) {
 	defer wg.Done()
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
 	bar := progressbar.New(numRequests)
 	bar.RenderBlank()
 	m := make(map[int]Element)
+
+	go func(m map[int]Element) {
+		for sig := range c {
+
+			if sig == syscall.SIGINT {
+				fmt.Println("Interrupting...")
+
+				str := "code,freq,num_requests,avg_response_time\n"
+
+				for k, v := range m {
+					str += fmt.Sprintf("%d,%d,%d,%f\n", k, v.freq, numRequests, v.time)
+				}
+
+				file := "log.csv"
+				ioutil.WriteFile(file, []byte(str), 0644)
+				os.Exit(1)
+			}
+		}
+	}(m)
 
 	for i := 0; i < numRequests; i++ {
 		rq := <-ch
@@ -108,8 +132,8 @@ func logErrs(errchan chan Error, wg *sync.WaitGroup) {
 func main() {
 	flag.Parse()
 	args := flag.Args()
-	if len(args) != 2 {
-		fmt.Println("usage: ./main 'http://example.com' num_requests")
+	if len(args) < 2 || len(args) > 3 {
+		fmt.Println("usage: ./main 'http://example.com' num_requests [num_routines=4]")
 		os.Exit(1)
 	}
 
@@ -125,6 +149,19 @@ func main() {
 	var wg sync.WaitGroup
 
 	numRoutines := 4
+
+	if len(args) == 3 {
+		numRoutines, err := strconv.Atoi(args[2])
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		} else if numRequests < 1 {
+			fmt.Println("Please enter a positive number")
+			os.Exit(1)
+		} else {
+			fmt.Println("Setting number of routines to", numRoutines, ".  NOTE: this may break things on inferior machines if set too high")
+		}
+	}
 
 	wg.Add(numRoutines + 1)
 
