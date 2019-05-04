@@ -34,25 +34,6 @@ type Error struct {
 	timestamp string
 }
 
-// func logErr(e error) {
-// 	defer func() {
-// 		if r := recover(); r != nil {
-// 			fmt.Println("Recovered from:", r)
-// 		}
-// 	}()
-
-// 	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	defer f.Close()
-
-// 	if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e))); err != nil {
-// 		panic(err)
-// 	}
-// }
-
 func sendRequest(server string, wg *sync.WaitGroup, ch chan Response, gen chan int, errchan chan Error) {
 	defer wg.Done()
 
@@ -90,9 +71,9 @@ func logToFile(numRequests int, wg *sync.WaitGroup, ch chan Response) {
 		bar.Add(1)
 	}
 
-	str := "code,freq,response_time\n"
+	str := "code,freq,num_requests,avg_response_time\n"
 	for k, v := range m {
-		str += fmt.Sprintf("%d,%d,%f\n", k, v.freq, v.time)
+		str += fmt.Sprintf("%d,%d,%d,%f\n", k, v.freq, numRequests, v.time)
 	}
 
 	file := "log.csv"
@@ -102,7 +83,6 @@ func logToFile(numRequests int, wg *sync.WaitGroup, ch chan Response) {
 func generator(numRequests int, gen chan int) {
 	for i := numRequests; i > 0; i-- {
 		gen <- i
-		time.Sleep(5)
 	}
 	for {
 		gen <- 0
@@ -110,13 +90,13 @@ func generator(numRequests int, gen chan int) {
 }
 
 func logErrs(errchan chan Error, wg *sync.WaitGroup) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("Recovered from:", r)
-		}
-	}()
+	defer wg.Done()
 
 	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Unable to open error file:", err)
+		return
+	}
 
 	defer f.Close()
 
