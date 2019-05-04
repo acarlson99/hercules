@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"sync"
@@ -19,6 +20,11 @@ import (
 
 type Response struct {
 	code int
+	time float64
+}
+
+type Element struct {
+	freq int
 	time float64
 }
 
@@ -73,12 +79,28 @@ func logToFile(numRequests int, wg *sync.WaitGroup, ch chan Response) {
 	defer wg.Done()
 
 	bar := progressbar.New(numRequests)
+	m := make(map[int]Element)
 
 	for i := 0; i < numRequests; i++ {
-		_ = <-ch
-		// fmt.Println(rq)
+		rq := <-ch
+
+		if tmp, ok := m[rq.code]; ok {
+			tmp.freq++
+			tmp.time = (tmp.time + rq.time) / 2
+			m[rq.code] = tmp
+		} else {
+			m[rq.code] = Element{1, rq.time}
+		}
 		bar.Add(1)
 	}
+
+	str := "code,freq,response_time\n"
+	for k, v := range m {
+		str += fmt.Sprintf("%d,%d,%f\n", k, v.freq, v.time)
+	}
+
+	file := "log.csv"
+	ioutil.WriteFile(file, []byte(str), 0644)
 }
 
 func generator(numRequests int, gen chan int) {
