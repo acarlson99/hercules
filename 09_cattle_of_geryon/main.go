@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"strconv"
@@ -110,15 +111,13 @@ func generator(numRequests int, gen chan int) {
 func logErrs(errchan chan Error, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println("Unable to open error file:", err)
-		return
-	}
-
-	defer f.Close()
-
 	for e := <-errchan; ; e = <-errchan {
+		f, err := os.OpenFile("error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Println("Unable to open error file:", err)
+			return
+		}
+
 		if err != nil {
 			fmt.Println("Error writing to err.log:", err)
 			continue
@@ -126,6 +125,7 @@ func logErrs(errchan chan Error, wg *sync.WaitGroup) {
 		if _, err := f.Write([]byte(fmt.Sprintf("%s %s\n", time.Now().Format("20060102150405"), e.err))); err != nil {
 			fmt.Println("Error writing to err.log:", err)
 		}
+		f.Close()
 	}
 }
 
@@ -134,6 +134,12 @@ func main() {
 	args := flag.Args()
 	if len(args) < 2 || len(args) > 3 {
 		fmt.Println("usage: ./main 'http://example.com' num_requests [num_routines=4]")
+		os.Exit(1)
+	}
+
+	_, err := url.ParseRequestURI(args[0])
+	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
@@ -159,7 +165,7 @@ func main() {
 			fmt.Println("Please enter a positive number")
 			os.Exit(1)
 		} else {
-			fmt.Println("Setting number of routines to", numRoutines, ".  NOTE: this may break things on inferior machines if set too high")
+			fmt.Printf("Setting number of routines to %d.  NOTE: this may break things on inferior machines if set too high\n", numRoutines)
 		}
 	}
 
