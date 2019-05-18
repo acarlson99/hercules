@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:04:33 by acarlson          #+#    #+#             */
-/*   Updated: 2019/05/17 17:13:42 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/05/17 17:15:28 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ int		main(int argc, char **argv)
 			}
 		}
 		shutdown(sock_c, SHUT_RDWR);
+		close(sock_c);
 	}
 }
