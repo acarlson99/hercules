@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:04:33 by acarlson          #+#    #+#             */
-/*   Updated: 2019/05/17 17:15:28 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/05/17 17:23:58 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int		main(int argc, char **argv)
 		size_t msglen;
 		char msg[2049] = { 0 };
 		msg[2048] = '\0';
+		// send to google
 		while ((msglen = recv(sock_c, msg, 2048, 0)) > 0) {
 			dprintf(sock_c, "%s", msg);
 			printf("%s", msg);
@@ -91,6 +92,16 @@ int		main(int argc, char **argv)
 				break ;
 			}
 		}
+		// receive from google
+		/* while ((msglen = recv(sock_s, msg, 2048, 0)) > 0) { */
+		/* 	dprintf(sock_s, "%s", msg); */
+		/* 	printf("%s", msg); */
+		/* 	printf("%zu %d %d\n", msglen, msg[msglen - 1], msg[msglen - 2]); */
+		/* 	if (msg[msglen - 1] == '\0' && msg[msglen - 2] == '\0') { */
+		/* 		printf("BREAKING\n"); */
+		/* 		break ; */
+		/* 	} */
+		/* } */
 		shutdown(sock_c, SHUT_RDWR);
 		close(sock_c);
 	}
