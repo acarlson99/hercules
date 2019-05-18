@@ -6,7 +6,7 @@
 /*   By: acarlson <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:04:33 by acarlson          #+#    #+#             */
-/*   Updated: 2019/05/17 17:08:54 by acarlson         ###   ########.fr       */
+/*   Updated: 2019/05/17 17:13:42 by acarlson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@
 #define BACKLOG 5
 
 int sock_s;
+int sock_c;
 
 void	cleanup(int a) {
 	(void)a;
 	close(sock_s);
+	close(sock_c);
 	exit(1);
 }
 
@@ -70,7 +72,6 @@ int		main(int argc, char **argv)
 	while (1)
 	{
 		size_t len = sizeof(struct sockaddr);
-		int sock_c;
 
 		if ((sock_c = accept(sock_s, (struct sockaddr *)&server, (socklen_t *)&len)) < 0) {
 			// stuck here always
@@ -85,7 +86,7 @@ int		main(int argc, char **argv)
 			dprintf(sock_c, "%s", msg);
 			printf("%s", msg);
 			printf("%zu %d %d\n", msglen, msg[msglen - 1], msg[msglen - 2]);
-			if (msg[msglen - 1] == '\r' && msg[msglen - 2] == '\r') {
+			if (msg[msglen - 1] == '\0' && msg[msglen - 2] == '\0') {
 				printf("BREAKING\n");
 				break ;
 			}
