@@ -15,7 +15,7 @@
 | [Girdle of Hippolyta](08_girdle_of_hippolyta/)   | Send an email using SMTP                                         | :white\_check\_mark: |
 | [Cattle Of Geryon](09_cattle_of_geryon/)         | Create a server benchmarking program                             | :white\_check\_mark: |
 | [Apples Of Hesperides](10_apples_of_hesperides/) | Connect to a VM using RSA keys                                   | :white\_check\_mark: |
-| [Capturing Cerberus](11_capturing_cerberus/)     | ????                                                             |                      |
+| [Capturing Cerberus](11_capturing_cerberus/)     | Build a proxy                                                    | :x:                  |
 
 :question:				- not yet graded
 
